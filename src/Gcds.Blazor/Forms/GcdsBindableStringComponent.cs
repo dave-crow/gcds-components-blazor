@@ -17,7 +17,7 @@ public abstract class GcdsBindableStringComponent : GcdsComponentBase
     protected override async Task OnEventCoreAsync(GcdsEventArgs args)
     {
         if (args.Name is not ("gcdsInput" or "gcdsChange")) return;
-        var value = args.GetDetail<string>();
+        var value = await GetEventValueAsync(args);
         if (value == Value) return;
         Value = value;
         await ValueChanged.InvokeAsync(value);
@@ -26,4 +26,7 @@ public abstract class GcdsBindableStringComponent : GcdsComponentBase
             EditContext.NotifyFieldChanged(_field.Value);
         }
     }
+
+    protected virtual ValueTask<string?> GetEventValueAsync(GcdsEventArgs args) =>
+        ValueTask.FromResult(args.GetDetail<string>());
 }

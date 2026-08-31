@@ -1,0 +1,85 @@
+@page "/submission-test"
+@rendermode InteractiveServer
+@using Gcds.Blazor.Demo.Models
+@using Gcds.Blazor.Demo.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject IPersonSubmissionService SubmissionService
+
+<PageTitle>Submission Test — GCDS Blazor</PageTitle>
+
+<GcdsContainer Layout="page" Padding="400">
+    <GcdsBreadcrumbs>
+        <GcdsBreadcrumbsItem Href="/">Components</GcdsBreadcrumbsItem>
+        <GcdsBreadcrumbsItem Href="/submission-test">Submission Test</GcdsBreadcrumbsItem>
+    </GcdsBreadcrumbs>
+
+    <GcdsHeading Tag="h1">Submission Test</GcdsHeading>
+    <GcdsText Size="lead">Enter the person's details. All fields are required.</GcdsText>
+
+    @if (submissionSucceeded)
+    {
+        <GcdsAlert AlertRole="success" Heading="Submission successful">
+            The information for @person.Name was submitted successfully.
+        </GcdsAlert>
+    }
+    else if (submissionErrors.Count > 0)
+    {
+        <GcdsAlert AlertRole="danger" Heading="Submission unsuccessful">
+            @foreach (var error in submissionErrors)
+            {
+                <GcdsText>@error</GcdsText>
+            }
+        </GcdsAlert>
+    }
+
+    <EditForm EditContext="editContext">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <GcdsInput InputId="person-name"
+                   Name="name"
+                   Label="Name"
+                   Autocomplete="name"
+                   Required="true"
+                   ValidateOn="blur"
+                   @bind-Value="person.Name" />
+
+        <GcdsDateInput Name="date-of-birth"
+                       Legend="Date of birth"
+                       Format="full"
+                       Required="true"
+                       ValidateOn="blur"
+                       @bind-Value="person.DateOfBirth" />
+
+        <GcdsInput InputId="person-email"
+                   Name="email"
+                   Label="Email"
+                   Type="email"
+                   Autocomplete="email"
+                   Required="true"
+                   ValidateOn="blur"
+                   @bind-Value="person.Email" />
+
+        <GcdsButton Type="button" ButtonRole="primary" OnGcdsClick="HandleSubmit">Submit</GcdsButton>
+    </EditForm>
+</GcdsContainer>
+
+@code {
+    private readonly PersonModel person = new();
+    private EditContext editContext = default!;
+    private bool submissionSucceeded;
+    private IReadOnlyList<string> submissionErrors = [];
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(person);
+    }
+
+    private async Task HandleSubmit(GcdsEventArgs _)
+    {
+        var formIsValid = editContext.Validate();
+        var result = await SubmissionService.SubmitAsync(person);
+        submissionSucceeded = formIsValid && result.Succeeded;
+        submissionErrors = result.Errors;
+    }
+}
