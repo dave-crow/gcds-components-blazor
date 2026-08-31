@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using Gcds.Blazor.Demo.Models
 @using Gcds.Blazor.Demo.Services
+@using Microsoft.AspNetCore.Components.Forms
 @inject IPersonSubmissionService SubmissionService
 
 <PageTitle>Submission Test — GCDS Blazor</PageTitle>
@@ -31,7 +32,7 @@
         </GcdsAlert>
     }
 
-    <EditForm Model="person" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+    <EditForm EditContext="editContext">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -59,25 +60,26 @@
                    ValidateOn="blur"
                    @bind-Value="person.Email" />
 
-        <GcdsButton Type="submit" ButtonRole="primary">Submit</GcdsButton>
+        <GcdsButton Type="button" ButtonRole="primary" OnGcdsClick="HandleSubmit">Submit</GcdsButton>
     </EditForm>
 </GcdsContainer>
 
 @code {
     private readonly PersonModel person = new();
+    private EditContext editContext = default!;
     private bool submissionSucceeded;
     private IReadOnlyList<string> submissionErrors = [];
 
-    private async Task HandleValidSubmit()
+    protected override void OnInitialized()
     {
-        var result = await SubmissionService.SubmitAsync(person);
-        submissionSucceeded = result.Succeeded;
-        submissionErrors = result.Errors;
+        editContext = new EditContext(person);
     }
 
-    private void HandleInvalidSubmit()
+    private async Task HandleSubmit(GcdsEventArgs _)
     {
-        submissionSucceeded = false;
-        submissionErrors = [];
+        var formIsValid = editContext.Validate();
+        var result = await SubmissionService.SubmitAsync(person);
+        submissionSucceeded = formIsValid && result.Succeeded;
+        submissionErrors = result.Errors;
     }
 }
