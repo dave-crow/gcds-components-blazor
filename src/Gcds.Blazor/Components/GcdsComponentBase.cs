@@ -49,26 +49,25 @@ public abstract class GcdsComponentBase : ComponentBase, IAsyncDisposable
     protected override void BuildRenderTree(RenderTreeBuilder builder)
     {
         builder.OpenElement(0, TagName);
-        var seq = 1;
         foreach (var pair in GetAllParameters())
         {
             if (!ShouldRenderAttribute(pair.Value)) continue;
             var name = NormalizeAttributeName(pair.Key);
             if (pair.Value is bool b)
             {
-                if (b) builder.AddAttribute(seq++, name, true);
+                if (b) builder.AddAttribute(1, name, true);
             }
-            else builder.AddAttribute(seq++, name, Convert.ToString(pair.Value, CultureInfo.InvariantCulture));
+            else builder.AddAttribute(1, name, Convert.ToString(pair.Value, CultureInfo.InvariantCulture));
         }
-        builder.AddElementReferenceCapture(seq++, r => Element = r);
-        BuildChildContent(builder, ref seq);
+        builder.AddElementReferenceCapture(2, r => Element = r);
+        BuildChildContent(builder);
         builder.CloseElement();
     }
 
 
-    protected virtual void BuildChildContent(RenderTreeBuilder builder, ref int sequence)
+    protected virtual void BuildChildContent(RenderTreeBuilder builder)
     {
-        if (ChildContent is not null) builder.AddContent(sequence++, ChildContent);
+        if (ChildContent is not null) builder.AddContent(3, ChildContent);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

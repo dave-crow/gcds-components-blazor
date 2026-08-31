@@ -24,7 +24,7 @@
         </GcdsContainer>
     </GcdsGrid>
     <GcdsHeading Tag="h3">Pagination</GcdsHeading>
-    <GcdsPagination CurrentPage="2" TotalPages="5" Display="list" Url="?page=" Label="Component demo pages" />
+    <GcdsPagination CurrentPage="2" TotalPages="5" Display="list" Url="@paginationUrl" Label="Component demo pages" />
     <GcdsHeading Tag="h3">Navigation group and link</GcdsHeading>
     <GcdsNavGroup MenuLabel="Component categories" OpenTrigger="Open component categories">
         <GcdsNavLink Href="#forms">Forms</GcdsNavLink>
@@ -92,6 +92,7 @@
     private string? contactMethod;
     private string[]? selectedInterests;
     private string buttonMessage = "Select the button to test its GCDS event.";
+    private readonly string paginationUrl = "?page=";
 
     private readonly IReadOnlyList<GcdsCheckboxOption> checkboxOptions =
     [

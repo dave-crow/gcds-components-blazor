@@ -41,15 +41,15 @@ public sealed class GcdsTable : GcdsComponentBase
         if (Sort is not null) yield return new("sort", Sort);
     }
 
-    protected override void BuildChildContent(RenderTreeBuilder builder, ref int sequence)
+    protected override void BuildChildContent(RenderTreeBuilder builder)
     {
-        base.BuildChildContent(builder, ref sequence);
+        base.BuildChildContent(builder);
 
         if (Caption is not null)
         {
-            builder.OpenElement(sequence++, "span");
-            builder.AddAttribute(sequence++, "slot", "caption");
-            builder.AddContent(sequence++, Caption);
+            builder.OpenElement(4, "span");
+            builder.AddAttribute(5, "slot", "caption");
+            builder.AddContent(6, Caption);
             builder.CloseElement();
         }
 
@@ -67,9 +67,9 @@ public sealed class GcdsTable : GcdsComponentBase
                 var slotName = GetSlotName(row, column, rowIndex);
                 var context = new GcdsTableCellContext(row, rowIndex, column, GetMemberValue(row, column.Field));
 
-                builder.OpenElement(sequence++, "span");
-                builder.AddAttribute(sequence++, "slot", slotName);
-                builder.AddContent(sequence++, column.RenderCell(context));
+                builder.OpenElement(7, "span");
+                builder.AddAttribute(8, "slot", slotName);
+                builder.AddContent(9, column.RenderCell(context));
                 builder.CloseElement();
             }
         }
