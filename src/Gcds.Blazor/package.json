@@ -1,0 +1,15 @@
+{
+  "name": "gcds-blazor-assets",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "sync:gcds": "node ./scripts/sync-gcds.mjs",
+    "postinstall": "npm run sync:gcds",
+    "verify:coverage": "node ./scripts/verify-wrapper-coverage.mjs",
+    "test:js": "node --test ../../tests/js/*.test.mjs"
+  },
+  "dependencies": {
+    "@gcds-core/components": "1.4.0"
+  },
+  "type": "module"
+}

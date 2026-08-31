@@ -1,0 +1,52 @@
+@page "/all-components"
+
+<PageTitle>All GCDS wrappers</PageTitle>
+<GcdsHeading Tag="h1">All wrapper compile smoke test</GcdsHeading>
+<GcdsAlert Heading="Alert">Alert</GcdsAlert>
+<GcdsBreadcrumbs><GcdsBreadcrumbsItem Href="/">Home</GcdsBreadcrumbsItem></GcdsBreadcrumbs>
+<GcdsButton>Button</GcdsButton>
+<GcdsCard CardTitle="Card" Href="/" />
+<GcdsCheckboxes Name="checkboxes" Legend="Checkboxes" Options="@checkboxOptions" />
+<GcdsContainer>Container</GcdsContainer>
+<GcdsDateInput Name="date" Legend="Date" Format="full" />
+<GcdsDateModified>2026-08-30</GcdsDateModified>
+<GcdsDetails DetailsTitle="Details">Details body</GcdsDetails>
+<GcdsErrorMessage>Error</GcdsErrorMessage>
+<GcdsErrorSummary ErrorLinks="@errorLinks" />
+<GcdsFieldset Legend="Fieldset">Fieldset body</GcdsFieldset>
+<GcdsFileUploader Name="file" Label="File" UploaderId="file" />
+<GcdsFooter />
+<GcdsGrid Columns="1fr 1fr"><div>One</div><div>Two</div></GcdsGrid>
+<GcdsGridCol Desktop="6">Column</GcdsGridCol>
+<GcdsHeader LangHref="/fr" SkipToHref="#main" />
+<GcdsHeading Tag="h2">Heading</GcdsHeading>
+<GcdsHint>Hint</GcdsHint>
+<GcdsIcon Name="info-circle" />
+<GcdsInput InputId="input" Name="input" Label="Input" />
+<GcdsLabel Label="Label" LabelFor="input" />
+<GcdsLangToggle Href="/fr" />
+<GcdsLink Href="/">Link</GcdsLink>
+<GcdsNavGroup MenuLabel="Menu" OpenTrigger="Open"><GcdsNavLink Href="/">Link</GcdsNavLink></GcdsNavGroup>
+<GcdsNavLink Href="/">Nav link</GcdsNavLink>
+<GcdsNotice NoticeRole="info" NoticeTitle="Notice" NoticeTitleTag="h2">Notice</GcdsNotice>
+<GcdsPagination CurrentPage="1" TotalPages="3" Display="list" />
+<GcdsRadios Name="radios" Legend="Radios" Options="@radioOptions" />
+<GcdsSearch />
+<GcdsSelect SelectId="select" Name="select" Label="Select"><option value="a">A</option></GcdsSelect>
+<GcdsSideNav Label="Side navigation"><GcdsNavLink Href="/">Item</GcdsNavLink></GcdsSideNav>
+<GcdsSignature />
+<GcdsSrOnly>Screen reader text</GcdsSrOnly>
+<GcdsStepper CurrentStep="1" TotalSteps="3">Step title</GcdsStepper>
+<GcdsTable Columns="@tableColumns" Data="@tableRows" />
+<GcdsText>Text</GcdsText>
+<GcdsTextarea TextareaId="textarea" Name="textarea" Label="Textarea" />
+<GcdsTopNav Label="Top navigation"><GcdsNavLink Href="/">Item</GcdsNavLink></GcdsTopNav>
+<GcdsTopicMenu />
+
+@code {
+    readonly IReadOnlyList<GcdsCheckboxOption> checkboxOptions = [new("check-a", "A", "a")];
+    readonly IReadOnlyList<GcdsRadioOption> radioOptions = [new("radio-a", "A", "a")];
+    readonly IReadOnlyDictionary<string, string> errorLinks = new Dictionary<string, string> { ["#input"] = "Input error" };
+    readonly IReadOnlyList<GcdsTableColumn> tableColumns = [new("name", "Name")];
+    readonly IReadOnlyList<object> tableRows = [new { name = "Example" }];
+}

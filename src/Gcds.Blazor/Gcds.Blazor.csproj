@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <PackageId>Gcds.Blazor</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>GCDS Blazor community wrapper</Authors>
+    <Description>Blazor wrappers for the official GC Design System web components.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>Blazor;GCDS;GC Design System;Government of Canada;Web Components</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <SupportedPlatform Include="browser" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" Link="README.md" />
+  </ItemGroup>
+
+  <Target Name="WarnIfGcdsAssetsMissing" BeforeTargets="Build" Condition="!Exists('wwwroot/gcds/gcds.css') Or !Exists('wwwroot/gcds/gcds.esm.js')">
+    <Warning Text="GCDS static assets are missing. Run 'npm install' in src/Gcds.Blazor before running the demo or packing the library." />
+  </Target>
+
+  <Target Name="RequireGcdsAssetsForPack" BeforeTargets="Pack" Condition="!Exists('wwwroot/gcds/gcds.css') Or !Exists('wwwroot/gcds/gcds.esm.js')">
+    <Error Text="GCDS static assets are missing. Run 'npm install' in src/Gcds.Blazor before packing the library." />
+  </Target>
+</Project>

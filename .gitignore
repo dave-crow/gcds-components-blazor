@@ -1,0 +1,6 @@
+**/bin/
+**/obj/
+**/node_modules/
+src/Gcds.Blazor/wwwroot/gcds/*
+!src/Gcds.Blazor/wwwroot/gcds/README.txt
+.vs/

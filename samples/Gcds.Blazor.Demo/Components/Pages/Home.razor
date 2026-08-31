@@ -1,0 +1,36 @@
+@page "/"
+
+<PageTitle>GCDS Blazor wrapper smoke test</PageTitle>
+<GcdsContainer Layout="page" Padding="400">
+    <GcdsHeading Tag="h1">GCDS Blazor wrapper smoke test</GcdsHeading>
+    <GcdsText>Every released GCDS 1.4.0 web component has a Blazor wrapper in this library.</GcdsText>
+    <GcdsAlert Heading="Interop loaded" AlertRole="info">Custom events and complex JavaScript properties are bridged through JS interop.</GcdsAlert>
+    <GcdsButton ButtonRole="primary" OnGcdsClick="Clicked">Test event</GcdsButton>
+    <GcdsInput InputId="name" Name="name" Label="Name" @bind-Value="name" />
+    <GcdsSelect SelectId="province" Name="province" Label="Province" @bind-Value="province">
+        <option value="ON">Ontario</option><option value="QC">Quebec</option>
+    </GcdsSelect>
+    <GcdsCheckboxes Name="checks" Legend="Choose" Options="@checkboxes" @bind-Value="selected" />
+    <GcdsRadios Name="radio" Legend="Choose one" Options="@radios" @bind-Value="radio" />
+    <GcdsTable Columns="@columns" Data="@rows" Sort="true" Pagination="true" Caption="@tableCaption" OnGcdsTableStateChange="TableChanged" />
+    <GcdsDetails DetailsTitle="All wrapper types"><pre>@string.Join("\n", GcdsComponentCatalog.Components.Keys)</pre></GcdsDetails>
+    <GcdsLink Href="/all-components">Open the all-components smoke page</GcdsLink>
+</GcdsContainer>
+
+@code {
+    string? name; string? province; string? radio; string[]? selected;
+    string message = "";
+    readonly IReadOnlyList<GcdsCheckboxOption> checkboxes = [new("a", "Alpha", "a"), new("b", "Beta", "b")];
+    readonly IReadOnlyList<GcdsRadioOption> radios = [new("x", "X", "x"), new("y", "Y", "y")];
+    static RenderFragment<GcdsTableCellContext> StrongCell => context => builder =>
+    {
+        builder.OpenElement(0, "strong");
+        builder.AddContent(1, context.Value);
+        builder.CloseElement();
+    };
+    readonly IReadOnlyList<GcdsTableColumn> columns = [new("name", "Name"), new("value", "Value") { RenderCell = StrongCell }];
+    readonly IReadOnlyList<object> rows = [new { id = "a", name = "Alpha", value = 1 }, new { id = "b", name = "Beta", value = 2 }];
+    readonly RenderFragment tableCaption = builder => builder.AddContent(0, "Example table");
+    void Clicked(GcdsEventArgs e) => message = $"Received {e.Name}";
+    void TableChanged(GcdsEventArgs e) { var state = e.GetDetail<GcdsTableStateChange>(); }
+}

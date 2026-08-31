@@ -1,0 +1,30 @@
+name: build-and-test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install GCDS assets
+        working-directory: src/Gcds.Blazor
+        run: npm install
+      - name: Verify wrapper catalog
+        working-directory: src/Gcds.Blazor
+        run: npm run verify:coverage
+      - name: Test JavaScript interop
+        working-directory: src/Gcds.Blazor
+        run: npm run test:js
+      - name: Restore
+        run: dotnet restore Gcds.Blazor.sln
+      - name: Build
+        run: dotnet build Gcds.Blazor.sln -c Release --no-restore
