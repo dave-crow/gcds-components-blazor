@@ -5,16 +5,16 @@ namespace Gcds.Blazor.Models;
 public sealed record GcdsCheckboxOption(
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("label")] string Label,
-    [property: JsonPropertyName("value")] string? Value = null,
-    [property: JsonPropertyName("hint")] string? Hint = null,
-    [property: JsonPropertyName("checked")] bool? Checked = null);
+    [property: JsonPropertyName("value"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Value = null,
+    [property: JsonPropertyName("hint"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Hint = null,
+    [property: JsonPropertyName("checked"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] bool? Checked = null);
 
 public sealed record GcdsRadioOption(
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("label")] string Label,
     [property: JsonPropertyName("value")] string Value,
-    [property: JsonPropertyName("hint")] string? Hint = null,
-    [property: JsonPropertyName("checked")] bool? Checked = null);
+    [property: JsonPropertyName("hint"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] string? Hint = null,
+    [property: JsonPropertyName("checked"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] bool? Checked = null);
 
 public sealed record GcdsSuggestionOption(
     [property: JsonPropertyName("label")] string Label,
