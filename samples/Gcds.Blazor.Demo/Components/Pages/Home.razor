@@ -49,7 +49,7 @@
             <GcdsFileUploader UploaderId="demo-file" Name="attachment" Label="Upload an attachment" />
         </GcdsGridCol>
     </GcdsGrid>
-    <GcdsFieldset Legend="Supporting form components">
+    <GcdsFieldset Legend="Supporting form components" LegendSize="h3">
         <GcdsLabel LabelFor="label-example" Label="Standalone label" />
         <GcdsHint>Hints provide extra guidance before a user enters information.</GcdsHint>
         <GcdsErrorMessage>An example validation error message.</GcdsErrorMessage>
@@ -92,7 +92,10 @@
     private string? contactMethod;
     private string[]? selectedInterests;
     private string buttonMessage = "Select the button to test its GCDS event.";
-    private readonly string paginationUrl = "?page=";
+    private readonly object paginationUrl = new
+    {
+        queryStrings = new Dictionary<string, object> { ["page::match"] = 1 }
+    };
 
     private readonly IReadOnlyList<GcdsCheckboxOption> checkboxOptions =
     [

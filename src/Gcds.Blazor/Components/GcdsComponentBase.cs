@@ -57,7 +57,10 @@ public abstract class GcdsComponentBase : ComponentBase, IAsyncDisposable
             {
                 if (b) builder.AddAttribute(1, name, true);
             }
-            else builder.AddAttribute(1, name, Convert.ToString(pair.Value, CultureInfo.InvariantCulture));
+            else if (IsPrimitiveAttributeValue(pair.Value))
+                builder.AddAttribute(1, name, Convert.ToString(pair.Value, CultureInfo.InvariantCulture));
+            else
+                builder.AddAttribute(1, name, JsonSerializer.Serialize(pair.Value, pair.Value!.GetType()));
         }
         builder.AddElementReferenceCapture(2, r => Element = r);
         BuildChildContent(builder);
@@ -99,7 +102,9 @@ public abstract class GcdsComponentBase : ComponentBase, IAsyncDisposable
             foreach (var p in AdditionalAttributes) if (p.Value is not null) yield return p;
     }
 
-    private static bool ShouldRenderAttribute(object? value) => value is string or char or bool or byte or sbyte or short or ushort or int or uint or long or ulong or float or double or decimal or DateTime or DateTimeOffset or Guid or Enum;
+    private static bool ShouldRenderAttribute(object? value) => value is not null;
+
+    private static bool IsPrimitiveAttributeValue(object? value) => value is string or char or bool or byte or sbyte or short or ushort or int or uint or long or ulong or float or double or decimal or DateTime or DateTimeOffset or Guid or Enum;
 
     internal static string NormalizeAttributeName(string name)
     {

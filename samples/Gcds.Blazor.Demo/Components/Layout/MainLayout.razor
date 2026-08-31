@@ -1,9 +1,11 @@
 @inherits LayoutComponentBase
+@implements IDisposable
+@inject NavigationManager Navigation
 
 <GcdsHeader LangHref="/fr" SkipToHref="#main-content" SignatureHasLink="true" />
 <GcdsTopNav Label="Main navigation">
-    <GcdsNavLink Href="/" Current="true">Components</GcdsNavLink>
-    <GcdsNavLink Href="/submission-test">Submission Test</GcdsNavLink>
+    <GcdsNavLink Href="/" Current="@(CurrentPath == string.Empty)">Components</GcdsNavLink>
+    <GcdsNavLink Href="/submission-test" Current="@(CurrentPath == "submission-test")">Submission Test</GcdsNavLink>
     <GcdsNavLink Href="https://github.com/cds-snc/gcds-components-blazor">GitHub</GcdsNavLink>
 </GcdsTopNav>
 
@@ -12,3 +14,16 @@
 </main>
 
 <GcdsFooter Display="compact" />
+
+@code {
+    private string CurrentPath => Navigation.ToBaseRelativePath(Navigation.Uri)
+        .Split(['?', '#'], 2)[0]
+        .Trim('/');
+
+    protected override void OnInitialized() => Navigation.LocationChanged += HandleLocationChanged;
+
+    private void HandleLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs args) =>
+        InvokeAsync(StateHasChanged);
+
+    public void Dispose() => Navigation.LocationChanged -= HandleLocationChanged;
+}

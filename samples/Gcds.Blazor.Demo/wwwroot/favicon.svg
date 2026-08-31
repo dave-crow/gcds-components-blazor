@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Government of Canada">
+  <rect width="64" height="64" rx="8" fill="#fff"/>
+  <path fill="#d3080c" d="M0 0h14v64H0zm50 0h14v64H50zM32 12l3 8 7-3-3 8 7 3-10 7 3 9-7-4-7 4 3-9-10-7 7-3-3-8 7 3z"/>
+</svg>
