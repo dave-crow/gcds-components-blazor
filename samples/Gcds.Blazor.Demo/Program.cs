@@ -1,6 +1,8 @@
 using Gcds.Blazor.Demo.Components;
+using Gcds.Blazor.Demo.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddScoped<IPersonSubmissionService, PersonSubmissionService>();
 var app = builder.Build();
 app.UseStaticFiles();
 app.UseAntiforgery();

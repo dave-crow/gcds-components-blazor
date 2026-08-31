@@ -42,4 +42,9 @@ public sealed class GcdsDateInput : Gcds.Blazor.Forms.GcdsBindableStringComponen
 public ValueTask<bool> CheckValidityAsync() => InvokeAsync<bool>("checkValidity");
     public ValueTask ValidateAsync() => InvokeAsync("validate");
     public ValueTask<string> GetValidationMessageAsync() => InvokeAsync<string>("getValidationMessage");
+
+    // Events from the date input's three nested controls bubble with only the value of
+    // the control that changed. Read the combined YYYY-MM-DD host value instead.
+    protected override async ValueTask<string?> GetEventValueAsync(GcdsEventArgs args) =>
+        await GetPropertyAsync<string?>("value");
 }

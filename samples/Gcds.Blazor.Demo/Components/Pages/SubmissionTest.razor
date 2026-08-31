@@ -1,6 +1,8 @@
 @page "/submission-test"
 @rendermode InteractiveServer
 @using Gcds.Blazor.Demo.Models
+@using Gcds.Blazor.Demo.Services
+@inject IPersonSubmissionService SubmissionService
 
 <PageTitle>Submission Test — GCDS Blazor</PageTitle>
 
@@ -17,6 +19,15 @@
     {
         <GcdsAlert AlertRole="success" Heading="Submission successful">
             The information for @person.Name was submitted successfully.
+        </GcdsAlert>
+    }
+    else if (submissionErrors.Count > 0)
+    {
+        <GcdsAlert AlertRole="danger" Heading="Submission unsuccessful">
+            @foreach (var error in submissionErrors)
+            {
+                <GcdsText>@error</GcdsText>
+            }
         </GcdsAlert>
     }
 
@@ -55,8 +66,18 @@
 @code {
     private readonly PersonModel person = new();
     private bool submissionSucceeded;
+    private IReadOnlyList<string> submissionErrors = [];
 
-    private void HandleValidSubmit() => submissionSucceeded = true;
+    private async Task HandleValidSubmit()
+    {
+        var result = await SubmissionService.SubmitAsync(person);
+        submissionSucceeded = result.Succeeded;
+        submissionErrors = result.Errors;
+    }
 
-    private void HandleInvalidSubmit() => submissionSucceeded = false;
+    private void HandleInvalidSubmit()
+    {
+        submissionSucceeded = false;
+        submissionErrors = [];
+    }
 }
