@@ -1,0 +1,62 @@
+@page "/submission-test"
+@rendermode InteractiveServer
+@using Gcds.Blazor.Demo.Models
+
+<PageTitle>Submission Test — GCDS Blazor</PageTitle>
+
+<GcdsContainer Layout="page" Padding="400">
+    <GcdsBreadcrumbs>
+        <GcdsBreadcrumbsItem Href="/">Components</GcdsBreadcrumbsItem>
+        <GcdsBreadcrumbsItem Href="/submission-test">Submission Test</GcdsBreadcrumbsItem>
+    </GcdsBreadcrumbs>
+
+    <GcdsHeading Tag="h1">Submission Test</GcdsHeading>
+    <GcdsText Size="lead">Enter the person's details. All fields are required.</GcdsText>
+
+    @if (submissionSucceeded)
+    {
+        <GcdsAlert AlertRole="success" Heading="Submission successful">
+            The information for @person.Name was submitted successfully.
+        </GcdsAlert>
+    }
+
+    <EditForm Model="person" OnValidSubmit="HandleValidSubmit" OnInvalidSubmit="HandleInvalidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <GcdsInput InputId="person-name"
+                   Name="name"
+                   Label="Name"
+                   Autocomplete="name"
+                   Required="true"
+                   ValidateOn="blur"
+                   @bind-Value="person.Name" />
+
+        <GcdsDateInput Name="date-of-birth"
+                       Legend="Date of birth"
+                       Format="full"
+                       Required="true"
+                       ValidateOn="blur"
+                       @bind-Value="person.DateOfBirth" />
+
+        <GcdsInput InputId="person-email"
+                   Name="email"
+                   Label="Email"
+                   Type="email"
+                   Autocomplete="email"
+                   Required="true"
+                   ValidateOn="blur"
+                   @bind-Value="person.Email" />
+
+        <GcdsButton Type="submit" ButtonRole="primary">Submit</GcdsButton>
+    </EditForm>
+</GcdsContainer>
+
+@code {
+    private readonly PersonModel person = new();
+    private bool submissionSucceeded;
+
+    private void HandleValidSubmit() => submissionSucceeded = true;
+
+    private void HandleInvalidSubmit() => submissionSucceeded = false;
+}
