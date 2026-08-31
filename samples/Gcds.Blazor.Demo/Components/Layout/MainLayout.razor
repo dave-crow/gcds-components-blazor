@@ -1,0 +1,13 @@
+@inherits LayoutComponentBase
+
+<GcdsHeader LangHref="/fr" SkipToHref="#main-content" SignatureHasLink="true" />
+<GcdsTopNav Label="Main navigation">
+    <GcdsNavLink Href="/" Current="true">Components</GcdsNavLink>
+    <GcdsNavLink Href="https://github.com/cds-snc/gcds-components-blazor">GitHub</GcdsNavLink>
+</GcdsTopNav>
+
+<main id="main-content">
+    @Body
+</main>
+
+<GcdsFooter Display="compact" />
