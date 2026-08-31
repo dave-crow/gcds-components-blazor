@@ -1,36 +1,130 @@
 @page "/"
 
-<PageTitle>GCDS Blazor wrapper smoke test</PageTitle>
+<PageTitle>Components — GCDS Blazor</PageTitle>
+
 <GcdsContainer Layout="page" Padding="400">
-    <GcdsHeading Tag="h1">GCDS Blazor wrapper smoke test</GcdsHeading>
-    <GcdsText>Every released GCDS 1.4.0 web component has a Blazor wrapper in this library.</GcdsText>
-    <GcdsAlert Heading="Interop loaded" AlertRole="info">Custom events and complex JavaScript properties are bridged through JS interop.</GcdsAlert>
-    <GcdsButton ButtonRole="primary" OnGcdsClick="Clicked">Test event</GcdsButton>
-    <GcdsInput InputId="name" Name="name" Label="Name" @bind-Value="name" />
-    <GcdsSelect SelectId="province" Name="province" Label="Province" @bind-Value="province">
-        <option value="ON">Ontario</option><option value="QC">Quebec</option>
-    </GcdsSelect>
-    <GcdsCheckboxes Name="checks" Legend="Choose" Options="@checkboxes" @bind-Value="selected" />
-    <GcdsRadios Name="radio" Legend="Choose one" Options="@radios" @bind-Value="radio" />
-    <GcdsTable Columns="@columns" Data="@rows" Sort="true" Pagination="true" Caption="@tableCaption" OnGcdsTableStateChange="TableChanged" />
-    <GcdsDetails DetailsTitle="All wrapper types"><pre>@string.Join("\n", GcdsComponentCatalog.Components.Keys)</pre></GcdsDetails>
-    <GcdsLink Href="/all-components">Open the all-components smoke page</GcdsLink>
+    <GcdsBreadcrumbs>
+        <GcdsBreadcrumbsItem Href="/">Components</GcdsBreadcrumbsItem>
+    </GcdsBreadcrumbs>
+
+    <GcdsHeading Tag="h1">Components</GcdsHeading>
+    <GcdsText Size="lead">Interactive examples of every component available in the GCDS Blazor library.</GcdsText>
+    <GcdsNotice NoticeRole="info" NoticeTitle="About this page" NoticeTitleTag="h2">
+        These examples use the Blazor wrappers directly. Form controls below are bound to this page, so you can try them out.
+    </GcdsNotice>
+
+    <GcdsHeading Tag="h2">Actions and navigation</GcdsHeading>
+    <GcdsGrid Columns="repeat(auto-fit, minmax(16rem, 1fr))" Gap="300">
+        <GcdsCard CardTitle="Card" CardTitleTag="h3" Description="A linked card created with the GCDS card component." Href="#forms" Badge="Example" />
+        <GcdsContainer Border="true" Padding="300">
+            <GcdsHeading Tag="h3">Buttons and links</GcdsHeading>
+            <GcdsButton ButtonRole="primary" OnGcdsClick="HandleClick">Try the button</GcdsButton>
+            <GcdsText>@buttonMessage</GcdsText>
+            <GcdsLink Href="#forms">Go to form controls</GcdsLink>
+        </GcdsContainer>
+    </GcdsGrid>
+    <GcdsHeading Tag="h3">Pagination</GcdsHeading>
+    <GcdsPagination CurrentPage="2" TotalPages="5" Display="list" Url="@paginationUrl" Label="Component demo pages" />
+    <GcdsHeading Tag="h3">Navigation group and link</GcdsHeading>
+    <GcdsNavGroup MenuLabel="Component categories" OpenTrigger="Open component categories">
+        <GcdsNavLink Href="#forms">Forms</GcdsNavLink>
+        <GcdsNavLink Href="#content">Content</GcdsNavLink>
+    </GcdsNavGroup>
+
+    <GcdsHeading Tag="h2" Id="forms">Form controls</GcdsHeading>
+    <GcdsGrid Columns="repeat(auto-fit, minmax(18rem, 1fr))" Gap="400">
+        <GcdsGridCol>
+            <GcdsInput InputId="demo-name" Name="name" Label="Name" Hint="Enter your full name." @bind-Value="name" />
+            <GcdsTextarea TextareaId="demo-message" Name="message" Label="Message" Rows="4" @bind-Value="message" />
+            <GcdsSelect SelectId="demo-province" Name="province" Label="Province or territory" @bind-Value="province">
+                <option value="">Select an option</option>
+                <option value="ON">Ontario</option>
+                <option value="QC">Quebec</option>
+            </GcdsSelect>
+        </GcdsGridCol>
+        <GcdsGridCol>
+            <GcdsCheckboxes Name="interests" Legend="Topics of interest" Options="@checkboxOptions" @bind-Value="selectedInterests" />
+            <GcdsRadios Name="contact" Legend="Preferred contact method" Options="@radioOptions" @bind-Value="contactMethod" />
+            <GcdsDateInput Name="start-date" Legend="Start date" Format="full" />
+            <GcdsFileUploader UploaderId="demo-file" Name="attachment" Label="Upload an attachment" />
+        </GcdsGridCol>
+    </GcdsGrid>
+    <GcdsFieldset Legend="Supporting form components">
+        <GcdsLabel LabelFor="label-example" Label="Standalone label" />
+        <GcdsHint>Hints provide extra guidance before a user enters information.</GcdsHint>
+        <GcdsErrorMessage>An example validation error message.</GcdsErrorMessage>
+    </GcdsFieldset>
+    <GcdsErrorSummary Heading="There is a problem" ErrorLinks="@errorLinks" />
+    <GcdsSearch SearchId="component-search" Name="search" Placeholder="Search components" Action="/" Method="get" />
+
+    <GcdsHeading Tag="h2" Id="content">Content and feedback</GcdsHeading>
+    <GcdsAlert Heading="Information alert" AlertRole="info">Alerts bring important information to the reader's attention.</GcdsAlert>
+    <GcdsDetails DetailsTitle="Open the details example">This content is revealed when the details component is opened.</GcdsDetails>
+    <GcdsHeading Tag="h3">Heading component</GcdsHeading>
+    <GcdsText>The text component provides consistent typography for paragraphs.</GcdsText>
+    <GcdsText><GcdsIcon Name="info-circle" /> The icon component can reinforce meaning visually.</GcdsText>
+    <GcdsText>Visible text<GcdsSrOnly> with additional context available only to screen readers</GcdsSrOnly>.</GcdsText>
+    <GcdsDateModified>2026-08-31</GcdsDateModified>
+    <GcdsStepper CurrentStep="2" TotalSteps="4">Review your information</GcdsStepper>
+
+    <GcdsHeading Tag="h2">Data and layout</GcdsHeading>
+    <GcdsTable Columns="@tableColumns" Data="@tableRows" Caption="@tableCaption" Sort="true" />
+    <GcdsGrid Columns="1fr 1fr" Gap="300">
+        <GcdsGridCol Desktop="6"><GcdsContainer Border="true" Padding="300">Grid column one</GcdsContainer></GcdsGridCol>
+        <GcdsGridCol Desktop="6"><GcdsContainer Border="true" Padding="300">Grid column two</GcdsContainer></GcdsGridCol>
+    </GcdsGrid>
+
+    <GcdsHeading Tag="h2">Site-wide components</GcdsHeading>
+    <GcdsText>The page shell demonstrates the header, top navigation, navigation link, language toggle, signature and footer components. Standalone examples are included below.</GcdsText>
+    <GcdsLangToggle Href="/fr" />
+    <GcdsSignature Type="signature" Variant="colour" HasLink="true" />
+    <GcdsSideNav Label="Demo side navigation">
+        <GcdsNavLink Href="#forms">Form controls</GcdsNavLink>
+        <GcdsNavLink Href="#content">Content and feedback</GcdsNavLink>
+    </GcdsSideNav>
+    <GcdsTopicMenu Home="true" />
 </GcdsContainer>
 
 @code {
-    string? name; string? province; string? radio; string[]? selected;
-    string message = "";
-    readonly IReadOnlyList<GcdsCheckboxOption> checkboxes = [new("a", "Alpha", "a"), new("b", "Beta", "b")];
-    readonly IReadOnlyList<GcdsRadioOption> radios = [new("x", "X", "x"), new("y", "Y", "y")];
-    static RenderFragment<GcdsTableCellContext> StrongCell => context => builder =>
+    private string? name;
+    private string? message;
+    private string? province;
+    private string? contactMethod;
+    private string[]? selectedInterests;
+    private string buttonMessage = "Select the button to test its GCDS event.";
+    private readonly string paginationUrl = "?page=";
+
+    private readonly IReadOnlyList<GcdsCheckboxOption> checkboxOptions =
+    [
+        new("design", "Design systems", "design"),
+        new("accessibility", "Accessibility", "accessibility")
+    ];
+
+    private readonly IReadOnlyList<GcdsRadioOption> radioOptions =
+    [
+        new("email", "Email", "email"),
+        new("phone", "Phone", "phone")
+    ];
+
+    private readonly IReadOnlyDictionary<string, string> errorLinks = new Dictionary<string, string>
     {
-        builder.OpenElement(0, "strong");
-        builder.AddContent(1, context.Value);
-        builder.CloseElement();
+        ["#demo-name"] = "Enter a name to see how an error links to a field."
     };
-    readonly IReadOnlyList<GcdsTableColumn> columns = [new("name", "Name"), new("value", "Value") { RenderCell = StrongCell }];
-    readonly IReadOnlyList<object> rows = [new { id = "a", name = "Alpha", value = 1 }, new { id = "b", name = "Beta", value = 2 }];
-    readonly RenderFragment tableCaption = builder => builder.AddContent(0, "Example table");
-    void Clicked(GcdsEventArgs e) => message = $"Received {e.Name}";
-    void TableChanged(GcdsEventArgs e) { var state = e.GetDetail<GcdsTableStateChange>(); }
+
+    private readonly IReadOnlyList<GcdsTableColumn> tableColumns =
+    [
+        new("component", "Component"),
+        new("category", "Category")
+    ];
+
+    private readonly IReadOnlyList<object> tableRows =
+    [
+        new { id = "alert", component = "Alert", category = "Feedback" },
+        new { id = "button", component = "Button", category = "Action" },
+        new { id = "input", component = "Input", category = "Form" }
+    ];
+
+    private readonly RenderFragment tableCaption = builder => builder.AddContent(0, "Example component inventory");
+
+    private void HandleClick(GcdsEventArgs args) => buttonMessage = $"Received the {args.Name} event.";
 }
